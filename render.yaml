@@ -20,7 +20,7 @@ services:
       - key: PORT
         value: 10000
       - key: FRONTEND_URL
-        fromContext: frontend_url
+        value: '*' # Update this to your live Vercel URL later for security
       - key: FIREBASE_PROJECT_ID
         value: fourth-wing-round-2
       - key: COMPILER_URL
