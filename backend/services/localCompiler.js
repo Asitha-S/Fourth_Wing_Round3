@@ -1,5 +1,5 @@
 const axios = require('axios');
-const COMPILER_URL = (process.env.COMPILER_URL || 'http://localhost:5175').replace(/\/+$/, '');
+const COMPILER_URL = process.env.COMPILER_URL || 'http://localhost:5175';
 
 /**
  * Execute code using the local compiler service
@@ -94,16 +94,15 @@ async function executeCode(code, language, testCases) {
  */
 async function testConnection() {
     try {
-        const response = await axios.get(`${COMPILER_URL}/`);
-        if (response.data && response.data.status) {
-            console.log(`✅ Compiler connection established: ${response.data.status}`);
-            return true;
-        }
+        await axios.get(COMPILER_URL); // Likely 404 but proves server is up
     } catch (error) {
-        console.error(`⚠️ Compiler connectivity warning at ${COMPILER_URL}:`, error.message);
-        return false;
+        if (error.code === 'ECONNREFUSED') {
+            console.error('❌ Local compiler not running on port 5175');
+            return false;
+        }
     }
-    return false;
+    console.log('✅ Local Compiler connection successful!');
+    return true;
 }
 
 module.exports = {

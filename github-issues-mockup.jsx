@@ -1421,100 +1421,71 @@ function LanguageSelector({ onSubmit, initialSelected = [] }) {
     );
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-
 const TeamSignIn = ({ onStart, onAdmin }) => {
-    const [teamName, setTeamName] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [team, setTeam] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!teamName || !password) {
-            setError("Please fill in all fields");
-            return;
-        }
-
+    const handleStart = async () => {
+        if (!team.trim()) return;
         setLoading(true);
         setError("");
         try {
-            const res = await fetch(`${API_BASE_URL}/submissions/start`, {
+            const res = await fetch('http://localhost:5001/api/submissions/start', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ teamName: teamName, password: password })
+                body: JSON.stringify({ teamName: team })
             });
             const data = await res.json();
             if (data.success) {
-                onStart(data.data.teamName, data.data.startTime, data.data.selectedLanguages, data.data.selectedIssueIds);
+                onStart(team, data.data.startTime, data.data.languages, data.data.assignedIssueIds);
             } else {
-                setError(data.error || "Login failed");
+                setError(data.error || "Failed to start");
             }
         } catch (e) {
-            console.error("Login Error:", e);
-            setError("Failed to connect to server. Ensure backend is running.");
+            setError("Connection error");
         }
         setLoading(false);
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", backgroundColor: "#0d1117", color: "#c9d1d9", padding: "20px" }}>
-            <div style={{ width: "100%", maxWidth: "400px", padding: "32px", borderRadius: "8px", backgroundColor: "#161b22", border: "1px solid #30363d", boxShadow: "0 8px 24px rgba(0,0,0,0.5)" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "24px" }}>
-                    <svg width="32" height="32" viewBox="0 0 16 16" fill="white">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-                    </svg>
-                    <h1 style={{ fontSize: "28px", fontWeight: "bold", margin: 0 }}>Fourth Wing</h1>
-                </div>
-                <h2 style={{ fontSize: "18px", fontWeight: 500, marginBottom: "24px", textAlign: "center", color: "#8b949e" }}>Round 2: Team Portal</h2>
-
-                <form onSubmit={handleSubmit}>
-                    <div style={{ marginBottom: "16px" }}>
-                        <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", color: "#8b949e" }}>Team Name</label>
-                        <input
-                            type="text"
-                            value={teamName}
-                            onChange={(e) => setTeamName(e.target.value)}
-                            placeholder="Enter your team name"
-                            style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", backgroundColor: "#0d1117", border: "1px solid #30363d", color: "white", fontSize: "16px" }}
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                        <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", color: "#8b949e" }}>Access Pin</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter 4-digit PIN"
-                            style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", backgroundColor: "#0d1117", border: "1px solid #30363d", color: "white", fontSize: "16px" }}
-                        />
-                    </div>
-
-                    {error && <div style={{ color: "#f85149", backgroundColor: "rgba(248,81,73,0.1)", padding: "12px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px", border: "1px solid rgba(248,81,73,0.2)" }}>{error}</div>}
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        style={{ width: "100%", padding: "12px", borderRadius: "6px", backgroundColor: "#238636", color: "white", border: "none", fontSize: "16px", fontWeight: "bold", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1, transition: "background 0.2s" }}
-                        onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = "#2ea043")}
-                        onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = "#238636")}
-                    >
-                        {loading ? "Authenticating..." : "Start Challenge"}
-                    </button>
-                </form>
-
-                <div style={{ marginTop: "24px", paddingTop: "24px", borderTop: "1px solid #30363d", textAlign: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", backgroundColor: "#0d1117", color: "#c9d1d9" }}>
+            <div style={{ width: "100%", maxWidth: "400px", padding: "32px", borderRadius: "6px", backgroundColor: "#161b22", border: "1px solid #30363d", boxShadow: "0 4px 12px rgba(0,0,0,0.5)" }}>
+                <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "24px", textAlign: "center" }}>Team Login</h2>
+                <input
+                    type="text"
+                    placeholder="Enter Team Name"
+                    style={{ width: "100%", padding: "12px", borderRadius: "6px", backgroundColor: "#0d1117", border: "1px solid #30363d", color: "white", marginBottom: "16px" }}
+                    value={team}
+                    onChange={e => setTeam(e.target.value)}
+                />
+                {error && <div style={{ color: "#f85149", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
+                <button
+                    onClick={handleStart}
+                    disabled={loading}
+                    style={{
+                        width: "100%",
+                        padding: "12px",
+                        backgroundColor: "#238636",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                        cursor: loading ? "not-allowed" : "pointer",
+                        marginBottom: "16px",
+                        opacity: loading ? 0.7 : 1
+                    }}
+                >
+                    {loading ? "Starting..." : "Start Contest"}
+                </button>
+                <div style={{ textAlign: "right" }}>
                     <button
                         onClick={onAdmin}
-                        style={{ background: "none", border: "none", color: "#8b949e", fontSize: "13px", cursor: "pointer", textDecoration: "underline" }}
+                        style={{ background: "none", border: "none", color: "#8b949e", fontSize: "12px", cursor: "pointer", textDecoration: "underline" }}
                     >
-                        Maintainer Access
+                        Admin Access
                     </button>
                 </div>
-            </div>
-            <div style={{ marginTop: "24px", color: "#484f58", fontSize: "12px" }}>
-                © 2026 Techfest Engine • Fourth Wing v2.1.0
             </div>
         </div>
     );
@@ -1572,7 +1543,7 @@ const AdminLogView = ({ onBack }) => {
     const fetchLogs = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE_URL}/submissions/logs`);
+            const res = await fetch('http://localhost:5001/api/submissions/logs');
             const data = await res.json();
             if (data.success) {
                 setRawLogs(data.data);
@@ -1787,7 +1758,7 @@ export default function GitHubIssuesMockup() {
         setPenaltyTimer(null);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/submissions/penalty`, {
+            const response = await fetch('http://localhost:5001/api/submissions/penalty', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1966,7 +1937,7 @@ export default function GitHubIssuesMockup() {
 
         try {
             // Using correct backend port 5000
-            const response = await fetch(`${API_BASE_URL}/submissions/run`, {
+            const response = await fetch('http://localhost:5001/api/submissions/run', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1996,7 +1967,7 @@ export default function GitHubIssuesMockup() {
         setActiveConsoleTab("Output");
 
         try {
-            const response = await fetch(`${API_BASE_URL}/submissions/submit`, {
+            const response = await fetch('http://localhost:5001/api/submissions/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -2108,7 +2079,7 @@ export default function GitHubIssuesMockup() {
             const randomizedIds = randomized.map(i => i.id);
 
             // Save to backend
-            fetch(`${API_BASE_URL}/submissions/languages`, {
+            fetch('http://localhost:5001/api/submissions/languages', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ teamName, languages: langs, issueIds: randomizedIds })
