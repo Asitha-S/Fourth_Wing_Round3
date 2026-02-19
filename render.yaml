@@ -1,4 +1,15 @@
 services:
+  # The Compiler Service (Port 5175)
+  - type: web
+    name: fourth-wing-compiler
+    env: docker
+    rootDir: compiler
+    plan: free # Note: Docker on Render may require a starter plan depending on regions
+    envVars:
+      - key: PORT
+        value: 5175
+
+  # The Backend Service (Port 5001)
   - type: web
     name: fourth-wing-backend
     env: node
@@ -10,9 +21,10 @@ services:
         value: 10000
       - key: FRONTEND_URL
         fromContext: frontend_url
-      - key: JUDGE0_API_KEY
-        sync: false
-      - key: JUDGE0_HOST
-        value: judge0-ce.p.rapidapi.com
       - key: FIREBASE_PROJECT_ID
         sync: false
+      - key: COMPILER_URL
+        fromService:
+          name: fourth-wing-compiler
+          type: web
+          property: host
