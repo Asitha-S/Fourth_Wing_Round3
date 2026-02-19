@@ -22,7 +22,7 @@ services:
       - key: FRONTEND_URL
         fromContext: frontend_url
       - key: FIREBASE_PROJECT_ID
-        sync: false
+        value: fourth-wing-round-2
       - key: COMPILER_URL
         fromService:
           name: fourth-wing-compiler
