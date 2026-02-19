@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const { executeCode, COMPILER_URL } = require('./services/localCompiler');
+const { executeCode, COMPILER_URL, testConnection } = require('./services/localCompiler');
 const { getLogs } = require('./services/logger');
 
 // Import routes
@@ -60,9 +60,13 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log('🚀 LeetCode Backend Server');
     console.log(`📡 Server running on port ${PORT}`);
+
+    // Test connectivity to compiler
+    await testConnection();
+
     console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
     console.log(`🤖 Compiler URL: ${COMPILER_URL}`);
     console.log(`⚡ Judge0 Host: ${process.env.JUDGE0_HOST || 'judge0-ce.p.rapidapi.com'}`);
