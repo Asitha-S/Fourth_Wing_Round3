@@ -84,8 +84,8 @@ async function executeCode(code, language, testCases) {
         };
 
     } catch (error) {
-        console.error('Error executing code on local compiler:', error.message);
-        throw error;
+        console.error(`❌ Error executing code on compiler at ${COMPILER_URL}:`, error.response?.data || error.message);
+        throw new Error(`Compiler Error: ${error.response?.data?.error || error.message}`);
     }
 }
 
@@ -107,5 +107,6 @@ async function testConnection() {
 
 module.exports = {
     executeCode,
-    testConnection
+    testConnection,
+    COMPILER_URL
 };

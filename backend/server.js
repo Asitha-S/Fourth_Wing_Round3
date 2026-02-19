@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+const { executeCode, COMPILER_URL } = require('./services/localCompiler');
+const { getLogs } = require('./services/logger');
+
 // Import routes
 const problemsRouter = require('./routes/problems');
 const submissionsRouter = require('./routes/submissions');
@@ -61,6 +64,7 @@ app.listen(PORT, () => {
     console.log('🚀 LeetCode Backend Server');
     console.log(`📡 Server running on port ${PORT}`);
     console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+    console.log(`🤖 Compiler URL: ${COMPILER_URL}`);
     console.log(`⚡ Judge0 Host: ${process.env.JUDGE0_HOST || 'judge0-ce.p.rapidapi.com'}`);
     console.log(`🔥 Firebase Project: ${process.env.FIREBASE_PROJECT_ID || 'Not configured'}`);
     console.log('');
