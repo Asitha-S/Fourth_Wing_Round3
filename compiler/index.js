@@ -234,11 +234,12 @@ compiler.post("/run", async (req, res) => {
 });
 
 // Start server
-compiler.listen(5175, (error) => {
+const PORT = process.env.PORT || 5175;
+compiler.listen(PORT, (error) => {
   if (error) {
     console.error("Error starting the server:", error);
   } else {
-    console.log("✅ Server started on port 5175");
+    console.log(`✅ Server started on port ${PORT}`);
   }
 });
 
