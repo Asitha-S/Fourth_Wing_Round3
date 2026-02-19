@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 console.log('Loading submissions route...');
 const { body, validationResult } = require('express-validator');
-const { executeCode } = require('../services/localCompiler');
+const { executeCode } = require('../services/judge0');
 const { getLogs } = require('../services/logger');
 const {
     getProblemById,
