@@ -1,0 +1,15 @@
+def check_inventory():
+    item_name = "Widget"
+    current_stock = 5
+    threshold = 10
+    
+    print("Checking item:", item_name)
+    
+    if current_stock >= threshold:
+        status = "In Stock"
+    elif current_stock < threshold:
+        status = "Restock"
+    
+    print("Item Status:", status)
+
+check_inventory()

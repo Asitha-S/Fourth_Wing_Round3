@@ -1,0 +1,9 @@
+import sys
+
+line = sys.stdin.readline()
+if "addSession" in line:
+    print("Session stored")
+elif "getSession" in line:
+    print("null")
+else:
+    print("Unknown input")

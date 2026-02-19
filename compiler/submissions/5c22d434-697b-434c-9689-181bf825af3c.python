@@ -1,0 +1,19 @@
+def get_scores():
+    s1 = int(input())
+    s2 = int(input())
+    s3 = int(input())
+    s4 = int(input())
+    return [s1, s2, s3, s4]
+
+def validate_and_average(scores):
+    for s in scores:
+        if s < 40:
+            return "Student Failed"
+    
+    avg = (scores[0] + scores[1] + scores[2] + scores[3]) / 4
+    return avg
+
+all_scores = get_scores()
+result = validate_and_average(all_scores)
+print("Final Result:", result)
+

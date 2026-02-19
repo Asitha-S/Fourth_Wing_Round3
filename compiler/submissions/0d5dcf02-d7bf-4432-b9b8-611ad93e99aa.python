@@ -1,0 +1,22 @@
+def clean_and_count(text, target):
+    # Remove punctuation
+    for char in "!@#$%^&*().":
+        text = text.replace(char, "")
+    
+    text = text.lower()
+    target = target.lower()
+    
+    words = text.split()
+    count = 0
+    
+    def search():
+        nonlocal count
+        for w in words:
+            if w == target:
+                count += 1
+    
+    search()
+    return count
+
+my_text = "Python is great! Python is fast."
+print("Count:", clean_and_count(my_text, "python"))

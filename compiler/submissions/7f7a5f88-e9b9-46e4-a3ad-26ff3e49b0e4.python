@@ -1,0 +1,12 @@
+def get_uniques(data_list):
+    print("Processing list of length:", len(data_list))
+    
+    # We want to remove duplicates in place
+    for item in data_list:
+        if data_list.count(item) > 1:
+            data_list.remove(item)
+            
+    return data_list
+
+numbers = [1, 2, 2, 3, 4, 4, 5]
+print("Unique list:", get_uniques(numbers))

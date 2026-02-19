@@ -1,0 +1,17 @@
+class Store:
+    def __init__(self, name):
+        self.name = name
+
+    def add_to_cart(self, item, cart=[]):
+        cart.append(item)
+        return cart
+
+my_store = Store("Python Shop")
+
+# User 1 adds an item
+user1_cart = my_store.add_to_cart("Apple")
+print("User 1 Cart:", user1_cart)
+
+# User 2 adds an item (should start empty)
+user2_cart = my_store.add_to_cart("Banana")
+print("User 2 Cart:", user2_cart)

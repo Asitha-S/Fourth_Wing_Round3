@@ -1,0 +1,24 @@
+file_system = {
+    "Documents": {
+        "file1.txt": 50,
+        "file2.txt": 100,
+        "Work": {
+            "project.pdf": 500
+        }
+    },
+    "Downloads": {
+        "image.png": 200
+    }
+}
+
+def get_total_size(structure):
+    size = 0
+    for name, content in structure.items():
+        if isinstance(content, dict):
+            size += get_total_size(content)
+        else:
+            size += content
+            
+    return size
+
+print("Total Storage Used:", get_total_size(file_system))

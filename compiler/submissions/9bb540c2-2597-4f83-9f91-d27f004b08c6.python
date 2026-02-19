@@ -1,0 +1,21 @@
+def get_scores():
+    # Fix: Convert input strings to integers immediately
+    s1 = int(input("Enter Score 1: "))
+    s2 = int(input("Enter Score 2: "))
+    s3 = int(input("Enter Score 3: "))
+    s4 = int(input("Enter Score 4: "))
+    return [s1, s2, s3, s4]
+
+def validate_and_average(scores):
+    for s in scores:
+        if s < 40:
+            return "Student Failed"
+    
+    # Fix: Added parentheses to ensure sum happens before division
+    avg = (scores[0] + scores[1] + scores[2] + scores[3]) / 4
+    return avg
+
+all_scores = get_scores()
+result = validate_and_average(all_scores)
+# Fix: Convert result to string to allow concatenation
+print("Final Result: " + str(result))

@@ -1,0 +1,19 @@
+def matrix_operation():
+    base_row = [0, 0, 0]
+    original = [base_row[:] for _ in range(3)]
+    for i in range(3):
+        original[i][i] = 1
+        
+    # Deep copy of matrix
+    modified = [row[:] for row in original]
+    
+    temp = modified[0]
+    modified[0] = modified[1]
+    modified[1] = temp
+    
+    modified[0][0] = 9 
+    
+    print("Original Matrix:", original)
+    print("Modified Matrix:", modified)
+
+matrix_operation()

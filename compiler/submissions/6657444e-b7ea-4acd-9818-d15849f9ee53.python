@@ -1,0 +1,12 @@
+def sum_positives():
+    n = int(input())
+    total = 0
+    
+    for i in range(n):
+        val = int(input())
+        if val > 0:
+            total = total + val
+    
+    print("The total sum is:", total)
+
+sum_positives()

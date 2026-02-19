@@ -1,0 +1,15 @@
+def calculate_balance(balance, years):
+    rate = 0.05
+    
+    if balance > 10000:
+        balance = balance + (balance * rate)
+        
+    def apply_interest(balance, years, rate):
+        for i in range(years):
+            balance = balance + (balance * rate)
+        return balance
+
+    final = apply_interest(balance, years, rate)
+    return final
+
+print("New Balance:", calculate_balance(12000, 2))

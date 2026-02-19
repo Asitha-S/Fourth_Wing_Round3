@@ -1,0 +1,39 @@
+# Node modules
+node_modules/
+backend/node_modules/
+
+# Environment variables
+.env
+backend/.env
+
+# Firebase service account key
+backend/serviceAccountKey.json
+
+# Build results
+dist/
+dist-ssr/
+*.local
+
+# Logs
+*.log
+backend/*.log
+
+# IDE files
+.vscode/
+.idea/
+.DS_Store
+
+# Backups
+*.backup
+backend_reproduction_output.json
+compiler_reproduction_output.json
+test_backend_reproduction.cjs
+test_compiler_reproduction.cjs
+reproduce_issue.js
+fix-file.ps1
+fix-line.ps1
+submissions.log
+backend_log.txt
+penalty_debug.log
+backend/backend_log.txt
+backend/penalty_debug.log
