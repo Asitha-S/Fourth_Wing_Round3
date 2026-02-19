@@ -1,5 +1,5 @@
 const axios = require('axios');
-const COMPILER_URL = 'http://localhost:5175';
+const COMPILER_URL = process.env.COMPILER_URL || 'http://localhost:5175';
 
 /**
  * Execute code using the local compiler service

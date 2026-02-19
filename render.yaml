@@ -1,0 +1,30 @@
+services:
+  # The Compiler Service (Port 5175)
+  - type: web
+    name: fourth-wing-compiler
+    env: docker
+    rootDir: compiler
+    plan: free
+    envVars:
+      - key: PORT
+        value: 5175
+
+  # The Backend Service (Port 5001)
+  - type: web
+    name: fourth-wing-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        value: '*'
+      - key: FIREBASE_PROJECT_ID
+        value: fourth-wing-round-2
+      - key: COMPILER_URL
+        fromService:
+          name: fourth-wing-compiler
+          type: web
+          property: host
