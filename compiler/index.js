@@ -19,6 +19,11 @@ compiler.use(cors());
 compiler.use(express.urlencoded({ extended: true }));
 compiler.use(express.json());
 
+// Root health check
+compiler.get("/", (req, res) => {
+  res.json({ status: "Compiler is running" });
+});
+
 // Output directory for submission logs
 const outputPath = path.join(path.resolve(), "outputs");
 if (!fsSync.existsSync(outputPath)) {
