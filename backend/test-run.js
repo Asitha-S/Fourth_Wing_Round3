@@ -2,8 +2,9 @@ const axios = require('axios');
 
 async function testRun() {
     try {
-        console.log('Testing /api/submissions/run...');
-        const res = await axios.post('http://localhost:5001/api/submissions/run', {
+        const API_URL = process.env.API_URL || 'http://localhost:5001';
+        console.log(`Testing /api/submissions/run on ${API_URL}...`);
+        const res = await axios.post(`${API_URL}/api/submissions/run`, {
             problemId: 'issue-001',
             language: 'C',
             code: '#include <stdio.h>\\nint main() { printf("Hello"); return 0; }'

@@ -2,16 +2,17 @@ const axios = require('axios');
 
 async function test() {
     try {
+        const API_URL = process.env.API_URL || 'http://localhost:5001';
         console.log('Testing Health...');
         try {
-            const health = await axios.get('http://localhost:5001/health');
+            const health = await axios.get(`${API_URL}/health`);
             console.log('Health:', health.data);
         } catch (e) {
             console.log('Health check failed:', e.message);
         }
 
         console.log('Testing Backend API with Robust C Solution...');
-        const res = await axios.post('http://localhost:5001/api/submissions/run', {
+        const res = await axios.post(`${API_URL}/api/submissions/run`, {
             problemId: 'issue-001',
             language: 'C',
             code: `#include <stdio.h>

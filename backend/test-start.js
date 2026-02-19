@@ -2,8 +2,9 @@ const axios = require('axios');
 
 async function testStart() {
     try {
-        console.log('Testing /api/submissions/start...');
-        const res = await axios.post('http://localhost:5001/api/submissions/start', {
+        const API_URL = process.env.API_URL || 'http://localhost:5001';
+        console.log(`Testing /api/submissions/start on ${API_URL}...`);
+        const res = await axios.post(`${API_URL}/api/submissions/start`, {
             teamName: 'TestTeam'
         });
         console.log('Response:', JSON.stringify(res.data, null, 2));
