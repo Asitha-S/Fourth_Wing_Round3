@@ -1,5 +1,9 @@
 const axios = require('axios');
-const COMPILER_URL = process.env.COMPILER_URL || 'http://localhost:5175';
+let COMPILER_URL = process.env.COMPILER_URL || 'http://localhost:5175';
+if (COMPILER_URL && !COMPILER_URL.startsWith('http')) {
+    COMPILER_URL = `http://${COMPILER_URL}`;
+}
+COMPILER_URL = COMPILER_URL.replace(/\/+$/, '');
 
 /**
  * Execute code using the local compiler service
@@ -84,8 +88,10 @@ async function executeCode(code, language, testCases) {
         };
 
     } catch (error) {
-        console.error(`❌ Error executing code on compiler at ${COMPILER_URL}:`, error.response?.data || error.message);
-        throw new Error(`Compiler Error: ${error.response?.data?.error || error.message}`);
+        const errorData = error.response?.data;
+        const errorMessage = errorData?.detail || errorData?.error || error.message;
+        console.error(`❌ Compiler Error at ${COMPILER_URL}/submit:`, errorMessage);
+        throw new Error(`Compiler Error: ${errorMessage}`);
     }
 }
 
