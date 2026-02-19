@@ -8,7 +8,12 @@ let db;
 let isMockMode = false;
 
 try {
-    serviceAccount = require('../serviceAccountKey.json');
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    } else {
+        serviceAccount = require('../serviceAccountKey.json');
+    }
+
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         projectId: process.env.FIREBASE_PROJECT_ID
