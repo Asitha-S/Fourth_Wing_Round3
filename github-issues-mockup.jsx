@@ -1421,20 +1421,28 @@ function LanguageSelector({ onSubmit, initialSelected = [] }) {
     );
 }
 
-const TeamSignIn = ({ onStart, onAdmin }) => {
-    const [team, setTeam] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
-    const handleStart = async () => {
-        if (!team.trim()) return;
+const TeamSignIn = ({ onStart, onAdmin }) => {
+    const [teamName, setTeamName] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!teamName || !password) {
+            setError("Please fill in all fields");
+            return;
+        }
+
         setLoading(true);
         setError("");
         try {
-            const res = await fetch('http://localhost:5001/api/submissions/start', {
+            const res = await fetch(`${API_BASE_URL}/submissions/start`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ teamName: team })
+                body: JSON.stringify({ teamName: teamName })
             });
             const data = await res.json();
             if (data.success) {
@@ -1543,7 +1551,7 @@ const AdminLogView = ({ onBack }) => {
     const fetchLogs = async () => {
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5001/api/submissions/logs');
+            const res = await fetch(`${API_BASE_URL}/submissions/logs`);
             const data = await res.json();
             if (data.success) {
                 setRawLogs(data.data);
@@ -1758,7 +1766,7 @@ export default function GitHubIssuesMockup() {
         setPenaltyTimer(null);
 
         try {
-            const response = await fetch('http://localhost:5001/api/submissions/penalty', {
+            const response = await fetch(`${API_BASE_URL}/submissions/penalty`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1937,7 +1945,7 @@ export default function GitHubIssuesMockup() {
 
         try {
             // Using correct backend port 5000
-            const response = await fetch('http://localhost:5001/api/submissions/run', {
+            const response = await fetch(`${API_BASE_URL}/submissions/run`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1967,7 +1975,7 @@ export default function GitHubIssuesMockup() {
         setActiveConsoleTab("Output");
 
         try {
-            const response = await fetch('http://localhost:5001/api/submissions/submit', {
+            const response = await fetch(`${API_BASE_URL}/submissions/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -2079,7 +2087,7 @@ export default function GitHubIssuesMockup() {
             const randomizedIds = randomized.map(i => i.id);
 
             // Save to backend
-            fetch('http://localhost:5001/api/submissions/languages', {
+            fetch(`${API_BASE_URL}/submissions/languages`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ teamName, languages: langs, issueIds: randomizedIds })
